@@ -62,10 +62,19 @@ class Package:
                     if(last_package['id'] != self.package_tmp['id']):
                         self.packages_by_criteria.append(self.package_tmp)
 
+    def sort_by_bubble(self):
+        items_total = len(self.packages_by_criteria)
+
+        for i in range(items_total):
+            for j in range(0, items_total - i - 1):
+                if self.packages_by_criteria[j]['priority'] > self.packages_by_criteria[j + 1]['priority']:
+                    self.packages_by_criteria[j], self.packages_by_criteria[j + 1] = self.packages_by_criteria[j + 1], self.packages_by_criteria[j]
+
     def get_packages_ordered(self):
         self.get_packages_by_condition()
         print(self.packages_by_criteria)
-        # print(self.packages)
+        self.sort_by_bubble()
+        print(self.packages_by_criteria)
         return []
 
 
