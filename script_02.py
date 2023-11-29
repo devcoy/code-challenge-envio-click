@@ -70,12 +70,18 @@ class Package:
                 if self.packages_by_criteria[j]['priority'] > self.packages_by_criteria[j + 1]['priority']:
                     self.packages_by_criteria[j], self.packages_by_criteria[j + 1] = self.packages_by_criteria[j + 1], self.packages_by_criteria[j]
 
+    def get_distinct_packages(self):
+        return [item for item in self.packages + self.packages_by_criteria if item not in self.packages or item not in self.packages_by_criteria]
+
     def get_packages_ordered(self):
         self.get_packages_by_condition()
-        print(self.packages_by_criteria)
         self.sort_by_bubble()
-        print(self.packages_by_criteria)
-        return []
+        another_packages = self.get_distinct_packages()
+        self.packages_by_criteria.extend(another_packages)
+        return self.packages_by_criteria;
+
+
+
 
 
 file_path = 'input_02.json'
@@ -90,3 +96,4 @@ criteria = [
 
 package = Package(file_path, criteria)
 packages_ordered = package.get_packages_ordered()
+print(packages_ordered)
