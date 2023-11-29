@@ -6,6 +6,7 @@ class Package:
     condition_property_name = ''
     condition_assignment_operator = ''
     condition_value = 0
+    package_tmp = {}
     packages_by_criteria = []
 
     def __init__(self, file_path, criteria):
@@ -21,12 +22,50 @@ class Package:
 
     def get_packages_by_condition(self):
         for package in self.packages:
+            self.package_tmp = package;
             for condition in self.criteria:
                 self.set_condition(condition)
+
+                if self.condition_assignment_operator == '=':
+                    if package[self.condition_property_name] != self.condition_value:
+                        if self.packages_by_criteria:
+                            self.packages_by_criteria.pop()
+                        break
+
+                elif self.condition_assignment_operator == '>':
+                    if package[self.condition_property_name] <= self.condition_value:
+                        if self.packages_by_criteria:
+                            self.packages_by_criteria.pop()
+                        break
+
+                elif self.condition_assignment_operator == '>=':
+                    if package[self.condition_property_name] < self.condition_value:
+                        if self.packages_by_criteria:
+                            self.packages_by_criteria.pop()
+                        break
+
+                elif self.condition_assignment_operator == '<':
+                    if package[self.condition_property_name] >= self.condition_value:
+                        if self.packages_by_criteria:
+                            self.packages_by_criteria.pop()
+                        break
+
+                elif self.condition_assignment_operator == '<=':
+                    if package[self.condition_property_name] > self.condition_value:
+                        if self.packages_by_criteria:
+                            self.packages_by_criteria.pop()
+                        break
+                if(len(self.packages_by_criteria) == 0):
+                    self.packages_by_criteria.append(self.package_tmp)
+                else:
+                    last_package = self.packages_by_criteria[-1]
+                    if(last_package['id'] != self.package_tmp['id']):
+                        self.packages_by_criteria.append(self.package_tmp)
 
     def get_packages_ordered(self):
         self.get_packages_by_condition()
         print(self.packages_by_criteria)
+        # print(self.packages)
         return []
 
 
